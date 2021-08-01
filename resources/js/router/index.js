@@ -4,6 +4,7 @@ import Home from "../components/Home.vue";
 import Register from "../components/Auth/Register.vue";
 import Login from "../components/Auth/Login.vue";
 import Dashboard from "../components/Dashboard.vue";
+import NewItem from "../components/NewItem.vue";
 
  const routes = [
     {
@@ -33,6 +34,12 @@ import Dashboard from "../components/Dashboard.vue";
             })
         }
     },
+    {
+        path:'/new-item',
+        component: NewItem,
+        name: 'NewItem'
+       
+    },
     
 ]
 
@@ -42,4 +49,4 @@ const router = createRouter({
     routes,
   });
   
-  export default router;
+export default router;

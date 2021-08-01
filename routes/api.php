@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +29,12 @@ Route::middleware('auth:sanctum')->get('/authentificated', function () {
 Route::post('register', [RegisterController::class, 'index']);
 Route::post('login', [LoginController::class, 'index']);
 Route::post('logout', [LoginController::class, 'logout']);
+
+
+
+Route::group(['prefix' => 'item'], function () {
+    Route::post('add', [ItemController::class, 'store']);
+    Route::get('edit/{id}', [ItemController::class, 'edit']);
+    Route::post('update/{id}', [ItemController::class, 'update']);
+    Route::delete('delete/{id}', [ItemController::class, 'destroy']);
+});
