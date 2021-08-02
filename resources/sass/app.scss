@@ -6,3 +6,60 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+td,th{
+    text-align: center;
+    vertical-align: middle!important;
+}
+
+.item-container{
+    display: flex;
+    flex-direction: column;
+    border: solid 1px red;
+    width: 70%;
+    margin: auto;
+
+    .mode{
+        width: 100%;
+        background-color: $grey;
+        color: $white;
+        padding: 1rem;
+    }
+
+    .photo-container{
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: space-around;
+
+        img{
+            width: 20%;
+        }
+
+        div{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+
+            p{
+                margin: 0;
+                padding: 0;
+                width: 100%;
+
+                &:first-child{
+                    background-color: $red;
+                    padding: 1rem;
+                }
+            }
+        }
+    }
+}

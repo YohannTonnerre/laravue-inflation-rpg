@@ -19,7 +19,10 @@ class CreateItemsTable extends Migration
             $table->string('mode');
             $table->string('stats');
             $table->string('price');
-            $table->string('dropFrom');
+            $table->string('dropFromLvl');
+            $table->string('photo');
+            $table->string('dropChance');
+            $table->integer('maxLuck');
             $table->timestamps();
         });
     }

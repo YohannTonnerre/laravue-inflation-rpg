@@ -5,6 +5,8 @@ import Register from "../components/Auth/Register.vue";
 import Login from "../components/Auth/Login.vue";
 import Dashboard from "../components/Dashboard.vue";
 import NewItem from "../components/NewItem.vue";
+import EditItem from "../components/EditItem.vue";
+import ShowItem from "../components/ShowItem.vue";
 
  const routes = [
     {
@@ -23,6 +25,11 @@ import NewItem from "../components/NewItem.vue";
         name: 'Login'
     },
     {
+        path: '/show-item/:name',
+        component: ShowItem,
+        name: 'ShowItem'
+    },
+    {
         path:'/dashboard',
         component: Dashboard,
         name: 'Dashboard',
@@ -37,7 +44,27 @@ import NewItem from "../components/NewItem.vue";
     {
         path:'/new-item',
         component: NewItem,
-        name: 'NewItem'
+        name: 'NewItem',
+        beforeEnter: (to, from, next) => {
+            axios.get('/api/authentificated').then(()=>{
+                next()
+            }).catch(()=>{
+                return next({name: 'Login'})
+            })
+        }
+       
+    },
+    {
+        path:'/edit-item/:id',
+        component: EditItem,
+        name: 'EditItem',
+        beforeEnter: (to, from, next) => {
+            axios.get('/api/authentificated').then(()=>{
+                next()
+            }).catch(()=>{
+                return next({name: 'Login'})
+            })
+        }
        
     },
     

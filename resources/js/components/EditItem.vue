@@ -1,21 +1,22 @@
 <template>
     <div class="auth-container">
-        <form @submit.prevent="pushProduct" enctype="multipart/form-data">
+        <form @submit.prevent="updateItem" enctype="multipart/form-data">
             <p v-for="error in errors" :key="error">
                 {{error}}
             </p>
             <div class="form-group">
-                <label for="item name">Choose an item name</label>
+                <label for="name">Choose a name</label>
                 <input 
-                    id="item name"
+                    id="name"
                     type="text"
                     class="form-control"
-                    placeholder="item name"
-                    v-model="form.name">
+                    placeholder="name"
+                    v-model="item.name"
+                    value="item.name">
             </div>
             <div class="form-group">
                 <label for="mode">Choose a mode</label>
-                <select name="mode" id="mode" v-model="form.mode">
+                <select name="mode" id="mode" v-model="item.mode">
                     <option value="Normal">Normal</option>
                     <option value="Hard">Hard</option>
                 </select>
@@ -27,7 +28,7 @@
                     type="text"
                     class="form-control"
                     placeholder="stats"
-                    v-model="form.stats">
+                    v-model="item.stats">
             </div>
             <div class="form-group">
                 <label for="price">Choose a price</label>
@@ -36,7 +37,7 @@
                     type="text"
                     class="form-control"
                     placeholder="price"
-                    v-model="form.price">
+                    v-model="item.price">
             </div>
             <div class="form-group">
                 <label for="dropFrom">Choose a lvl</label>
@@ -45,8 +46,9 @@
                     type="text"
                     class="form-control"
                     placeholder="dropFrom"
-                    v-model="form.dropFromLvl">
+                    v-model="item.dropFromLvl">
             </div>
+            <img :src="'/upload/'+item.photo" alt="">
             <div class="form-group">
                 <label for="photo">Choisis une photo</label>
                 <input 
@@ -56,14 +58,15 @@
                     placeholder="photo"
                     v-on:change="changeImg">
             </div>
+
             <div class="form-group">
-                <label for="dropChance">Drop chance</label>
+                <label for="dropChance">Choose a drop chance</label>
                 <input 
                     id="dropChance"
                     type="text"
                     class="form-control"
                     placeholder="dropChance"
-                    v-model="form.dropChance">
+                    v-model="item.dropChance">
             </div>
 
             <div class="form-group">
@@ -73,7 +76,7 @@
                     type="text"
                     class="form-control"
                     placeholder="maxLuck"
-                    v-model="form.maxLuck">
+                    v-model="item.maxLuck">
             </div>
             
             <input type="submit" value="Creer le produit" class="btn btn-primary"/>
@@ -87,15 +90,8 @@
             return{
 
                 
-                form:{
-                    name:'',
-                    mode:'',
-                    stats:'',
-                    price:'',
-                    photo: '',
-                    dropFromLvl: '',
-                    dropChance: '',
-                    maxLuck: '',
+                item:{
+                    
 
                 },
                 errors:[]
@@ -105,26 +101,31 @@
         
         methods: {
             changeImg(e){
-                this.form.photo = e.target.files[0];
-                console.log(this.form.photo);
+                this.item.photo = e.target.files[0];
+                console.log(this.item.photo);
             },
-            pushProduct(){
+            updateItem(){
                 let data = new FormData();
-                this.form.dropChance.replace(/[%.]/g,'');
-                data.append('name', this.form.name);
-                data.append('mode', this.form.mode);
-                data.append('stats', this.form.stats);
-                data.append('price', this.form.price);
-                data.append('dropFromLvl', this.form.dropFromLvl);
-                data.append('photo', this.form.photo);
-                data.append('dropChance', this.form.dropChance.replace(/[%]/g,''));
-                data.append('maxLuck', this.form.maxLuck);
-                axios.post('/api/item/add',data).then(()=>{
+                console.log(this.item.dropChance);
+                data.append('name', this.item.name);
+                data.append('mode', this.item.mode);
+                data.append('stats', this.item.stats);
+                data.append('price', this.item.price);
+                data.append('dropFromLvl', this.item.dropFromLvl);
+                data.append('photo', this.item.photo);
+                data.append('dropChance', this.item.dropChance.replace(/[%]/g,''));
+                data.append('maxLuck', this.item.maxLuck);
+                axios.post(`/api/item/update/${this.$route.params.id}`, data).then(()=>{
                     this.$router.push({name: 'Dashboard'});
                 }).catch((error) => {
                     this.errors = error.response.data.errors;
                 })
             }
+        },
+        created(){
+            axios.get(`/api/item/edit/${this.$route.params.id}`).then((res)=>{
+                this.item = res.data
+            })
         }
     }
 </script>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Item;
+use File;
+
 
 class ItemController extends Controller
 {
@@ -14,7 +16,8 @@ class ItemController extends Controller
      */
     public function index()
     {
-        //
+        $items = Item::all();
+        return $items;
     }
 
     /**
@@ -40,8 +43,10 @@ class ItemController extends Controller
             'mode' => 'required',
             'stats' => 'required',
             'price' => 'required',
-            'dropFrom' => 'required',
+            'dropFromLvl' => 'required',
             'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'dropChance' => 'required',
+            'maxLuck' => 'required',
         ]);
   
         $input = $request->all();
@@ -62,9 +67,12 @@ class ItemController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($name)
     {
-        //
+        
+        $item = Item::where('name','=', $name)->first();
+        // dd($item);
+        return $item;
     }
 
     /**
@@ -75,7 +83,8 @@ class ItemController extends Controller
      */
     public function edit($id)
     {
-        //
+        $item = Item::find($id);
+        return $item;
     }
 
     /**
@@ -87,7 +96,34 @@ class ItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $item = Item::find($id);
+
+        $request->validate([
+            'name' => 'required',
+            'mode' => 'required',
+            'stats' => 'required',
+            'price' => 'required',
+            'dropFromLvl' => 'required',
+            'photo' => '',
+            'dropChance' => '',
+            'maxLuck' => '',
+        ]);
+
+        $input = $request->all();
+        
+
+        if ($photo = $request->file('photo')) {
+            File::delete('upload/'.$item->photo);
+            $destinationPath = 'upload/';
+            $profileImage = date('YmdHis') . "." . $photo->getClientOriginalExtension();
+            $photo->move($destinationPath, $profileImage);
+            $input['photo'] = "$profileImage";
+        }
+
+        
+        $item->update($input);
+
+        return response()->json($item['photo']);
     }
 
     /**
@@ -98,6 +134,8 @@ class ItemController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $item = Item::find($id);
+        File::delete('upload/'.$item->photo);
+        $item->delete();
     }
 }

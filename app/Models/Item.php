@@ -14,6 +14,9 @@ class Item extends Model
         'mode',
         'stats',
         'price',
-        'dropFrom'
+        'dropFromLvl',
+        'photo',
+        'dropChance',
+        'maxLuck',
     ];
 }
