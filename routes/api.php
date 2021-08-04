@@ -35,7 +35,7 @@ Route::get('items', [ItemController::class, 'index']);
 Route::group(['prefix' => 'item'], function () {
     Route::post('add', [ItemController::class, 'store']);
     Route::get('edit/{id}', [ItemController::class, 'edit']);
-    Route::get('show/{name}', [ItemController::class, 'show']);
+    Route::get('show/{id}', [ItemController::class, 'show']);
     Route::post('update/{id}', [ItemController::class, 'update']);
     Route::delete('delete/{id}', [ItemController::class, 'destroy']);
 });

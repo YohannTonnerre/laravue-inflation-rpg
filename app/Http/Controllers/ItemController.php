@@ -75,10 +75,10 @@ class ItemController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($name)
+    public function show($id)
     {
         
-        $item = Item::where('name','=', $name)->first();
+        $item = Item::where('id','=', $id)->first();
         // dd($item);
         return $item;
     }

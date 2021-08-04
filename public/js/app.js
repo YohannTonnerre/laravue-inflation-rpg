@@ -18556,7 +18556,7 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    axios.get("/api/item/show/".concat(this.$route.params.name)).then(function (res) {
+    axios.get("/api/item/show/".concat(this.$route.params.id)).then(function (res) {
       _this.item = res.data;
 
       _this.luckArray.push(_this.item.maxLuck);
@@ -18888,8 +18888,6 @@ var _hoisted_5 = {
 
 var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Modifier");
 
-var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" --> ");
-
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
 
@@ -18940,7 +18938,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
     }, 1032
     /* PROPS, DYNAMIC_SLOTS */
-    , ["to"]), _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+    , ["to"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
       "class": "btn btn-danger",
       onClick: function onClick($event) {
         return $options.deleteItem(item.id);
@@ -19281,7 +19279,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       to: {
         name: 'ShowItem',
         params: {
-          name: item.name
+          id: item.id
         }
       }
     }, {
@@ -19632,6 +19630,7 @@ try {
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.withCredentials = true;
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
@@ -19688,7 +19687,7 @@ var routes = [{
   component: _components_Auth_Login_vue__WEBPACK_IMPORTED_MODULE_2__.default,
   name: 'Login'
 }, {
-  path: '/show-item/:name',
+  path: '/show-item/:id',
   component: _components_ShowItem_vue__WEBPACK_IMPORTED_MODULE_6__.default,
   name: 'ShowItem'
 }, {

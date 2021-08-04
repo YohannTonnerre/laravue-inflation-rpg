@@ -30,7 +30,7 @@
                     {{ item.dropFromLvl }}
                 </td>
                 <td >
-                    <router-link v-if="item.dropChance != NULL" :to="{name: 'ShowItem', params: { name: item.name }}">
+                    <router-link v-if="item.dropChance != NULL" :to="{name: 'ShowItem', params: { id: item.id }}">
                         Calculate Drop rate
                     </router-link>
                     <p v-else>#</p>

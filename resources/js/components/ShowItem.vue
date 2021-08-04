@@ -79,7 +79,7 @@ export default {
     },
 
     mounted() {
-        axios.get(`/api/item/show/${this.$route.params.name}`).then((res)=>{
+        axios.get(`/api/item/show/${this.$route.params.id}`).then((res)=>{
             this.item = res.data;
             this.luckArray.push(this.item.maxLuck);
             let itemDrop = this.item.dropChance.substring(1, this.item.dropChance.length-1);

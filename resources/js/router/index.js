@@ -25,7 +25,7 @@ import ShowItem from "../components/ShowItem.vue";
         name: 'Login'
     },
     {
-        path: '/show-item/:name',
+        path: '/show-item/:id',
         component: ShowItem,
         name: 'ShowItem'
     },

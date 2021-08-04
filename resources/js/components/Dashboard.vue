@@ -20,7 +20,7 @@
                     <td>{{ item.price }}</td>
                     <td>
                         <div class="btn-group" role="group">
-                            <router-link :to="{name: 'EditItem', params: { id: item.id }}" class="btn btn-success">Modifier</router-link> -->
+                            <router-link :to="{name: 'EditItem', params: { id: item.id }}" class="btn btn-success">Modifier</router-link>
                             <button class="btn btn-danger" @click="deleteItem(item.id)">Supprimer</button>
                         </div>
                     </td>
