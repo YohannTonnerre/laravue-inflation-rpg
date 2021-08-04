@@ -14,6 +14,17 @@
                     v-model="item.name"
                     value="item.name">
             </div>
+
+            <img :src="'/upload/item/'+item.photo" alt="">
+            <div class="form-group">
+                <label for="photo">Choisis une photo</label>
+                <input 
+                    id="photo"
+                    type="file"
+                    class="form-control"
+                    placeholder="photo"
+                    v-on:change="changeImg">
+            </div>
             <div class="form-group">
                 <label for="mode">Choose a mode</label>
                 <select name="mode" id="mode" v-model="item.mode">
@@ -48,15 +59,16 @@
                     placeholder="dropFrom"
                     v-model="item.dropFromLvl">
             </div>
-            <img :src="'/upload/'+item.photo" alt="">
+            
+            <img :src="'/upload/mob/'+item.dropFromImg" alt="">
             <div class="form-group">
-                <label for="photo">Choisis une photo</label>
+                <label for="dropFromImg">Choisis une photo pour le mob</label>
                 <input 
-                    id="photo"
+                    id="dropFromImg"
                     type="file"
                     class="form-control"
-                    placeholder="photo"
-                    v-on:change="changeImg">
+                    placeholder="dropFromImg"
+                    v-on:change="changeImgDrop">
             </div>
 
             <div class="form-group">
@@ -104,15 +116,20 @@
                 this.item.photo = e.target.files[0];
                 console.log(this.item.photo);
             },
+            changeImgDrop(e){
+                this.item.dropFromImg = e.target.files[0];
+                console.log(this.item.dropFromImg);
+            },
             updateItem(){
                 let data = new FormData();
                 console.log(this.item.dropChance);
                 data.append('name', this.item.name);
+                data.append('photo', this.item.photo);
                 data.append('mode', this.item.mode);
                 data.append('stats', this.item.stats);
                 data.append('price', this.item.price);
                 data.append('dropFromLvl', this.item.dropFromLvl);
-                data.append('photo', this.item.photo);
+                data.append('dropFromImg', this.item.dropFromImg);
                 data.append('dropChance', this.item.dropChance.replace(/[%]/g,''));
                 data.append('maxLuck', this.item.maxLuck);
                 axios.post(`/api/item/update/${this.$route.params.id}`, data).then(()=>{

@@ -14,6 +14,15 @@
                     v-model="form.name">
             </div>
             <div class="form-group">
+                <label for="photo">Choisis une photo</label>
+                <input 
+                    id="photo"
+                    type="file"
+                    class="form-control"
+                    placeholder="photo"
+                    v-on:change="changeImg">
+            </div>
+            <div class="form-group">
                 <label for="mode">Choose a mode</label>
                 <select name="mode" id="mode" v-model="form.mode">
                     <option value="Normal">Normal</option>
@@ -48,14 +57,15 @@
                     v-model="form.dropFromLvl">
             </div>
             <div class="form-group">
-                <label for="photo">Choisis une photo</label>
+                <label for="dropFromImg">Choisis une photo pour le mob</label>
                 <input 
-                    id="photo"
+                    id="dropFromImg"
                     type="file"
                     class="form-control"
-                    placeholder="photo"
-                    v-on:change="changeImg">
+                    placeholder="dropFromImg"
+                    v-on:change="changeImgDrop">
             </div>
+            
             <div class="form-group">
                 <label for="dropChance">Drop chance</label>
                 <input 
@@ -94,6 +104,7 @@
                     price:'',
                     photo: '',
                     dropFromLvl: '',
+                    dropFromImg: '',
                     dropChance: '',
                     maxLuck: '',
 
@@ -108,15 +119,20 @@
                 this.form.photo = e.target.files[0];
                 console.log(this.form.photo);
             },
+            changeImgDrop(e){
+                this.form.dropFromImg = e.target.files[0];
+                console.log(this.form.dropFromImg);
+            },
             pushProduct(){
                 let data = new FormData();
                 this.form.dropChance.replace(/[%.]/g,'');
                 data.append('name', this.form.name);
+                data.append('photo', this.form.photo);
                 data.append('mode', this.form.mode);
                 data.append('stats', this.form.stats);
                 data.append('price', this.form.price);
                 data.append('dropFromLvl', this.form.dropFromLvl);
-                data.append('photo', this.form.photo);
+                data.append('dropFromImg', this.form.dropFromImg);
                 data.append('dropChance', this.form.dropChance.replace(/[%]/g,''));
                 data.append('maxLuck', this.form.maxLuck);
                 axios.post('/api/item/add',data).then(()=>{

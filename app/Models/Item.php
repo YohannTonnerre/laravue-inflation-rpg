@@ -11,11 +11,12 @@ class Item extends Model
 
     protected $fillable = [
         'name',
+        'photo',
         'mode',
         'stats',
         'price',
         'dropFromLvl',
-        'photo',
+        'dropFromImg',
         'dropChance',
         'maxLuck',
     ];

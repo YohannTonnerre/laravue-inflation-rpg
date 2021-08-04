@@ -16,13 +16,14 @@ class CreateItemsTable extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('photo');
             $table->string('mode');
             $table->string('stats');
             $table->string('price');
             $table->string('dropFromLvl');
-            $table->string('photo');
-            $table->string('dropChance');
-            $table->integer('maxLuck');
+            $table->string('dropFromImg')->nullable();
+            $table->string('dropChance')->nullable();
+            $table->integer('maxLuck')->nullable();
             $table->timestamps();
         });
     }

@@ -16,7 +16,7 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $items = Item::all();
+        $items = Item::orderBy('name')->get();
         return $items;
     }
 
@@ -40,22 +40,30 @@ class ItemController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'mode' => 'required',
             'stats' => 'required',
             'price' => 'required',
             'dropFromLvl' => 'required',
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'dropChance' => 'required',
-            'maxLuck' => 'required',
+            'dropFromImg' => 'image|nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'dropChance' => '',
+            'maxLuck' => '',
         ]);
   
         $input = $request->all();
   
         if ($photo = $request->file('photo')) {
-            $destinationPath = 'upload/';
+            $destinationPath = 'upload/item/';
             $profileImage = date('YmdHis') . "." . $photo->getClientOriginalExtension();
             $photo->move($destinationPath, $profileImage);
             $input['photo'] = $profileImage;
+        }
+
+        if ($dropFromImg = $request->file('dropFromImg')) {
+            $destinationPath = 'upload/mob/';
+            $profileImage = date('YmdHis') . "." . $dropFromImg->getClientOriginalExtension();
+            $dropFromImg->move($destinationPath, $profileImage);
+            $input['dropFromImg'] = $profileImage;
         }
     
         Item::create($input);
@@ -100,11 +108,12 @@ class ItemController extends Controller
 
         $request->validate([
             'name' => 'required',
+            'photo' => '',
             'mode' => 'required',
             'stats' => 'required',
             'price' => 'required',
             'dropFromLvl' => 'required',
-            'photo' => '',
+            'dropFromImg' => '',
             'dropChance' => '',
             'maxLuck' => '',
         ]);
@@ -113,17 +122,24 @@ class ItemController extends Controller
         
 
         if ($photo = $request->file('photo')) {
-            File::delete('upload/'.$item->photo);
-            $destinationPath = 'upload/';
+            File::delete('upload/item/'.$item->photo);
+            $destinationPath = 'upload/item/';
             $profileImage = date('YmdHis') . "." . $photo->getClientOriginalExtension();
             $photo->move($destinationPath, $profileImage);
             $input['photo'] = "$profileImage";
         }
 
+        if ($dropFromImg = $request->file('dropFromImg')) {
+            File::delete('upload/mob/'.$item->dropFromImg);
+            $destinationPath = 'upload/mob/';
+            $profileImage = date('YmdHis') . "." . $dropFromImg->getClientOriginalExtension();
+            $dropFromImg->move($destinationPath, $profileImage);
+            $input['dropFromImg'] = "$profileImage";
+        }
+
         
         $item->update($input);
 
-        return response()->json($item['photo']);
     }
 
     /**
@@ -135,7 +151,8 @@ class ItemController extends Controller
     public function destroy($id)
     {
         $item = Item::find($id);
-        File::delete('upload/'.$item->photo);
+        File::delete('upload/item/'.$item->photo);
+        File::delete('upload/mob/'.$item->dropFromImg);
         $item->delete();
     }
 }

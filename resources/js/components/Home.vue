@@ -16,7 +16,7 @@
                     <div class="item-container">
                         <p class="mode">{{item.mode}} Mode</p>
                         <div class="photo-container">
-                            <img :src="'/upload/'+item.photo" alt="">
+                            <img :src="'/upload/item/'+item.photo" alt="">
                             <div>
                                 <p>{{item.name}}</p>
                                 <p>{{item.stats}}</p>
@@ -25,8 +25,17 @@
                     </div>
                 </td>
                 <td>{{ item.price }}</td>
-                <td>{{ item.dropFromLvl }}</td>
-                <td><router-link :to="{name: 'ShowItem', params: { name: item.name }}">Calculate Drop rate</router-link></td>
+                <td>
+                     <img :src="'/upload/mob/'+item.dropFromImg" alt="">
+                    {{ item.dropFromLvl }}
+                </td>
+                <td >
+                    <router-link v-if="item.dropChance != NULL" :to="{name: 'ShowItem', params: { name: item.name }}">
+                        Calculate Drop rate
+                    </router-link>
+                    <p v-else>#</p>
+                </td>
+
                 
             </tr>
         </tbody>

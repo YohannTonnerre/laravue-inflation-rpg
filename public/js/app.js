@@ -18311,17 +18311,22 @@ __webpack_require__.r(__webpack_exports__);
       this.item.photo = e.target.files[0];
       console.log(this.item.photo);
     },
+    changeImgDrop: function changeImgDrop(e) {
+      this.item.dropFromImg = e.target.files[0];
+      console.log(this.item.dropFromImg);
+    },
     updateItem: function updateItem() {
       var _this = this;
 
       var data = new FormData();
       console.log(this.item.dropChance);
       data.append('name', this.item.name);
+      data.append('photo', this.item.photo);
       data.append('mode', this.item.mode);
       data.append('stats', this.item.stats);
       data.append('price', this.item.price);
       data.append('dropFromLvl', this.item.dropFromLvl);
-      data.append('photo', this.item.photo);
+      data.append('dropFromImg', this.item.dropFromImg);
       data.append('dropChance', this.item.dropChance.replace(/[%]/g, ''));
       data.append('maxLuck', this.item.maxLuck);
       axios.post("/api/item/update/".concat(this.$route.params.id), data).then(function () {
@@ -18404,6 +18409,7 @@ __webpack_require__.r(__webpack_exports__);
         price: '',
         photo: '',
         dropFromLvl: '',
+        dropFromImg: '',
         dropChance: '',
         maxLuck: ''
       },
@@ -18415,17 +18421,22 @@ __webpack_require__.r(__webpack_exports__);
       this.form.photo = e.target.files[0];
       console.log(this.form.photo);
     },
+    changeImgDrop: function changeImgDrop(e) {
+      this.form.dropFromImg = e.target.files[0];
+      console.log(this.form.dropFromImg);
+    },
     pushProduct: function pushProduct() {
       var _this = this;
 
       var data = new FormData();
       this.form.dropChance.replace(/[%.]/g, '');
       data.append('name', this.form.name);
+      data.append('photo', this.form.photo);
       data.append('mode', this.form.mode);
       data.append('stats', this.form.stats);
       data.append('price', this.form.price);
       data.append('dropFromLvl', this.form.dropFromLvl);
-      data.append('photo', this.form.photo);
+      data.append('dropFromImg', this.form.dropFromImg);
       data.append('dropChance', this.form.dropChance.replace(/[%]/g, ''));
       data.append('maxLuck', this.form.maxLuck);
       axios.post('/api/item/add', data).then(function () {
@@ -18458,24 +18469,88 @@ __webpack_require__.r(__webpack_exports__);
       item: {},
       luckArray: [0, 2000, 25000, 300000, 500000, 1000000],
       dropArray: [],
-      luckAmount: '1',
+      luckAmount: '0',
       dropChance: '0'
     };
   },
   computed: {
     dropChanceCalcul: function dropChanceCalcul() {
-      if (this.luckAmount <= this.luckArray[1]) {
-        var b = parseFloat(this.dropArray[0], 10);
-        var d = parseFloat(this.dropArray[1], 10);
-        var c = parseFloat(this.luckArray[1], 10);
-        var e = parseFloat(this.luckAmount, 10);
-        this.dropChance = (b + d) / c * e;
-        console.log(b);
-        console.log(d);
-        console.log(c);
-        console.log(e);
-        return this.dropChance;
+      if (this.luckAmount >= this.luckArray[6] && this.luckAmount <= this.luckArray[5]) {
+        var b = parseFloat(this.dropArray[5]);
+        var d = parseFloat(this.dropArray[6]);
+        var c = parseFloat(this.luckArray[6]);
+        var e = parseFloat(this.luckAmount);
+        return this.calculStat(b, c, d, e);
       }
+
+      if (this.luckAmount <= this.luckArray[1]) {
+        var _b = parseFloat(this.dropArray[0]);
+
+        var _d = parseFloat(this.dropArray[1]);
+
+        var _c = parseFloat(this.luckArray[1]);
+
+        var _e = parseFloat(this.luckAmount);
+
+        return this.calculStat(_b, _c, _d, _e);
+      }
+
+      if (this.luckAmount > this.luckArray[1] && this.luckAmount <= this.luckArray[2]) {
+        var _b2 = parseFloat(this.dropArray[1]);
+
+        var _d2 = parseFloat(this.dropArray[2]);
+
+        var _c2 = parseFloat(this.luckArray[2]);
+
+        var _e2 = parseFloat(this.luckAmount);
+
+        return this.calculStat(_b2, _c2, _d2, _e2);
+      }
+
+      if (this.luckAmount > this.luckArray[2] && this.luckAmount <= this.luckArray[3]) {
+        var _b3 = parseFloat(this.dropArray[2]);
+
+        var _d3 = parseFloat(this.dropArray[3]);
+
+        var _c3 = parseFloat(this.luckArray[3]);
+
+        var _e3 = parseFloat(this.luckAmount);
+
+        return this.calculStat(_b3, _c3, _d3, _e3);
+      }
+
+      if (this.luckAmount > this.luckArray[3] && this.luckAmount <= this.luckArray[4]) {
+        var _b4 = parseFloat(this.dropArray[3]);
+
+        var _d4 = parseFloat(this.dropArray[4]);
+
+        var _c4 = parseFloat(this.luckArray[4]);
+
+        var _e4 = parseFloat(this.luckAmount);
+
+        return this.calculStat(_b4, _c4, _d4, _e4);
+      }
+
+      if (this.luckAmount > this.luckArray[4] && this.luckAmount <= this.luckArray[5]) {
+        var _b5 = parseFloat(this.dropArray[4]);
+
+        var _d5 = parseFloat(this.dropArray[5]);
+
+        var _c5 = parseFloat(this.luckArray[5]);
+
+        var _e5 = parseFloat(this.luckAmount);
+
+        return this.calculStat(_b5, _c5, _d5, _e5);
+      }
+
+      if (this.luckAmount > this.luckArray[5]) {
+        return this.dropArray[5];
+      }
+    }
+  },
+  methods: {
+    calculStat: function calculStat(b, c, d, e) {
+      return this.dropChance = Number(b + e * ((d - b) / c)).toPrecision(5);
     }
   },
   mounted: function mounted() {
@@ -18498,8 +18573,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(_this.luckArray[_i] + ' ' + _this.dropArray[_i]);
       }
     });
-  },
-  created: function created() {}
+  }
 });
 
 /***/ }),
@@ -18912,30 +18986,30 @@ var _hoisted_4 = {
 };
 
 var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
+  "for": "photo"
+}, "Choisis une photo", -1
+/* HOISTED */
+);
+
+var _hoisted_6 = {
+  "class": "form-group"
+};
+
+var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
   "for": "mode"
 }, "Choose a mode", -1
 /* HOISTED */
 );
 
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("option", {
+var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("option", {
   value: "Normal"
 }, "Normal", -1
 /* HOISTED */
 );
 
-var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("option", {
+var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("option", {
   value: "Hard"
 }, "Hard", -1
-/* HOISTED */
-);
-
-var _hoisted_8 = {
-  "class": "form-group"
-};
-
-var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
-  "for": "stats"
-}, "Choose stats", -1
 /* HOISTED */
 );
 
@@ -18944,8 +19018,8 @@ var _hoisted_10 = {
 };
 
 var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
-  "for": "price"
-}, "Choose a price", -1
+  "for": "stats"
+}, "Choose stats", -1
 /* HOISTED */
 );
 
@@ -18954,8 +19028,8 @@ var _hoisted_12 = {
 };
 
 var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
-  "for": "dropFrom"
-}, "Choose a lvl", -1
+  "for": "price"
+}, "Choose a price", -1
 /* HOISTED */
 );
 
@@ -18964,8 +19038,8 @@ var _hoisted_14 = {
 };
 
 var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
-  "for": "photo"
-}, "Choisis une photo", -1
+  "for": "dropFrom"
+}, "Choose a lvl", -1
 /* HOISTED */
 );
 
@@ -18974,8 +19048,8 @@ var _hoisted_16 = {
 };
 
 var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
-  "for": "dropChance"
-}, "Choose a drop chance", -1
+  "for": "dropFromImg"
+}, "Choisis une photo pour le mob", -1
 /* HOISTED */
 );
 
@@ -18984,12 +19058,22 @@ var _hoisted_18 = {
 };
 
 var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
+  "for": "dropChance"
+}, "Choose a drop chance", -1
+/* HOISTED */
+);
+
+var _hoisted_20 = {
+  "class": "form-group"
+};
+
+var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
   "for": "maxLuck"
 }, "Max Luck", -1
 /* HOISTED */
 );
 
-var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
   type: "submit",
   value: "Creer le produit",
   "class": "btn btn-primary"
@@ -18999,7 +19083,7 @@ var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("form", {
-    onSubmit: _cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
+    onSubmit: _cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
       return $options.updateItem && $options.updateItem.apply($options, arguments);
     }, ["prevent"])),
     enctype: "multipart/form-data"
@@ -19022,80 +19106,95 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     value: "item.name"
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.item.name]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_4, [_hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("select", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.item.name]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("img", {
+    src: '/upload/item/' + $data.item.photo,
+    alt: ""
+  }, null, 8
+  /* PROPS */
+  , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_4, [_hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+    id: "photo",
+    type: "file",
+    "class": "form-control",
+    placeholder: "photo",
+    onChange: _cache[2] || (_cache[2] = function () {
+      return $options.changeImg && $options.changeImg.apply($options, arguments);
+    })
+  }, null, 32
+  /* HYDRATE_EVENTS */
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_6, [_hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("select", {
     name: "mode",
     id: "mode",
-    "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
+    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
       return $data.item.mode = $event;
     })
-  }, [_hoisted_6, _hoisted_7], 512
+  }, [_hoisted_8, _hoisted_9], 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.item.mode]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_8, [_hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.item.mode]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_10, [_hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
     id: "stats",
     type: "text",
     "class": "form-control",
     placeholder: "stats",
-    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+    "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
       return $data.item.stats = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.item.stats]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_10, [_hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.item.stats]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_12, [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
     id: "price",
     type: "text",
     "class": "form-control",
     placeholder: "price",
-    "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
+    "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
       return $data.item.price = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.item.price]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_12, [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.item.price]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_14, [_hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
     id: "dropFrom",
     type: "text",
     "class": "form-control",
     placeholder: "dropFrom",
-    "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
+    "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
       return $data.item.dropFromLvl = $event;
     })
   }, null, 512
   /* NEED_PATCH */
   ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.item.dropFromLvl]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("img", {
-    src: '/upload/' + $data.item.photo,
+    src: '/upload/mob/' + $data.item.dropFromImg,
     alt: ""
   }, null, 8
   /* PROPS */
-  , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_14, [_hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
-    id: "photo",
+  , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_16, [_hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+    id: "dropFromImg",
     type: "file",
     "class": "form-control",
-    placeholder: "photo",
-    onChange: _cache[6] || (_cache[6] = function () {
-      return $options.changeImg && $options.changeImg.apply($options, arguments);
+    placeholder: "dropFromImg",
+    onChange: _cache[7] || (_cache[7] = function () {
+      return $options.changeImgDrop && $options.changeImgDrop.apply($options, arguments);
     })
   }, null, 32
   /* HYDRATE_EVENTS */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_16, [_hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_18, [_hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
     id: "dropChance",
     type: "text",
     "class": "form-control",
     placeholder: "dropChance",
-    "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
+    "onUpdate:modelValue": _cache[8] || (_cache[8] = function ($event) {
       return $data.item.dropChance = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.item.dropChance]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_18, [_hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.item.dropChance]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_20, [_hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
     id: "maxLuck",
     type: "text",
     "class": "form-control",
     placeholder: "maxLuck",
-    "onUpdate:modelValue": _cache[8] || (_cache[8] = function ($event) {
+    "onUpdate:modelValue": _cache[9] || (_cache[9] = function ($event) {
       return $data.item.maxLuck = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.item.maxLuck]])]), _hoisted_20], 32
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.item.maxLuck]])]), _hoisted_22], 32
   /* HYDRATE_EVENTS */
   )]);
 }
@@ -19138,8 +19237,11 @@ var _hoisted_6 = {
   "class": "photo-container"
 };
 
-var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Calculate Drop rate");
+var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Calculate Drop rate ");
 
+var _hoisted_8 = {
+  key: 1
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
 
@@ -19157,7 +19259,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.mode) + " Mode", 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("img", {
-      src: '/upload/' + item.photo,
+      src: '/upload/item/' + item.photo,
       alt: ""
     }, null, 8
     /* PROPS */
@@ -19167,9 +19269,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* TEXT */
     )])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.price), 1
     /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.dropFromLvl), 1
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("img", {
+      src: '/upload/mob/' + item.dropFromImg,
+      alt: ""
+    }, null, 8
+    /* PROPS */
+    , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.dropFromLvl), 1
     /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", null, [item.dropChance != _ctx.NULL ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_router_link, {
+      key: 0,
       to: {
         name: 'ShowItem',
         params: {
@@ -19185,7 +19293,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
     }, 1032
     /* PROPS, DYNAMIC_SLOTS */
-    , ["to"])])]);
+    , ["to"])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("p", _hoisted_8, "#"))])]);
   }), 128
   /* KEYED_FRAGMENT */
   ))])])], 64
@@ -19226,30 +19334,30 @@ var _hoisted_4 = {
 };
 
 var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
+  "for": "photo"
+}, "Choisis une photo", -1
+/* HOISTED */
+);
+
+var _hoisted_6 = {
+  "class": "form-group"
+};
+
+var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
   "for": "mode"
 }, "Choose a mode", -1
 /* HOISTED */
 );
 
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("option", {
+var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("option", {
   value: "Normal"
 }, "Normal", -1
 /* HOISTED */
 );
 
-var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("option", {
+var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("option", {
   value: "Hard"
 }, "Hard", -1
-/* HOISTED */
-);
-
-var _hoisted_8 = {
-  "class": "form-group"
-};
-
-var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
-  "for": "stats"
-}, "Choose stats", -1
 /* HOISTED */
 );
 
@@ -19258,8 +19366,8 @@ var _hoisted_10 = {
 };
 
 var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
-  "for": "price"
-}, "Choose a price", -1
+  "for": "stats"
+}, "Choose stats", -1
 /* HOISTED */
 );
 
@@ -19268,8 +19376,8 @@ var _hoisted_12 = {
 };
 
 var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
-  "for": "dropFrom"
-}, "Choose a lvl", -1
+  "for": "price"
+}, "Choose a price", -1
 /* HOISTED */
 );
 
@@ -19278,8 +19386,8 @@ var _hoisted_14 = {
 };
 
 var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
-  "for": "photo"
-}, "Choisis une photo", -1
+  "for": "dropFrom"
+}, "Choose a lvl", -1
 /* HOISTED */
 );
 
@@ -19288,8 +19396,8 @@ var _hoisted_16 = {
 };
 
 var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
-  "for": "dropChance"
-}, "Drop chance", -1
+  "for": "dropFromImg"
+}, "Choisis une photo pour le mob", -1
 /* HOISTED */
 );
 
@@ -19298,12 +19406,22 @@ var _hoisted_18 = {
 };
 
 var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
+  "for": "dropChance"
+}, "Drop chance", -1
+/* HOISTED */
+);
+
+var _hoisted_20 = {
+  "class": "form-group"
+};
+
+var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
   "for": "maxLuck"
 }, "Max Luck", -1
 /* HOISTED */
 );
 
-var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
   type: "submit",
   value: "Creer le produit",
   "class": "btn btn-primary"
@@ -19313,7 +19431,7 @@ var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("form", {
-    onSubmit: _cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
+    onSubmit: _cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
       return $options.pushProduct && $options.pushProduct.apply($options, arguments);
     }, ["prevent"])),
     enctype: "multipart/form-data"
@@ -19335,75 +19453,85 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.name]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_4, [_hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("select", {
-    name: "mode",
-    id: "mode",
-    "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
-      return $data.form.mode = $event;
-    })
-  }, [_hoisted_6, _hoisted_7], 512
-  /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.form.mode]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_8, [_hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
-    id: "stats",
-    type: "text",
-    "class": "form-control",
-    placeholder: "stats",
-    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
-      return $data.form.stats = $event;
-    })
-  }, null, 512
-  /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.stats]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_10, [_hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
-    id: "price",
-    type: "text",
-    "class": "form-control",
-    placeholder: "price",
-    "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
-      return $data.form.price = $event;
-    })
-  }, null, 512
-  /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.price]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_12, [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
-    id: "dropFrom",
-    type: "text",
-    "class": "form-control",
-    placeholder: "dropFrom",
-    "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
-      return $data.form.dropFromLvl = $event;
-    })
-  }, null, 512
-  /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.dropFromLvl]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_14, [_hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.name]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_4, [_hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
     id: "photo",
     type: "file",
     "class": "form-control",
     placeholder: "photo",
-    onChange: _cache[6] || (_cache[6] = function () {
+    onChange: _cache[2] || (_cache[2] = function () {
       return $options.changeImg && $options.changeImg.apply($options, arguments);
     })
   }, null, 32
   /* HYDRATE_EVENTS */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_16, [_hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_6, [_hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("select", {
+    name: "mode",
+    id: "mode",
+    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+      return $data.form.mode = $event;
+    })
+  }, [_hoisted_8, _hoisted_9], 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.form.mode]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_10, [_hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+    id: "stats",
+    type: "text",
+    "class": "form-control",
+    placeholder: "stats",
+    "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
+      return $data.form.stats = $event;
+    })
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.stats]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_12, [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+    id: "price",
+    type: "text",
+    "class": "form-control",
+    placeholder: "price",
+    "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
+      return $data.form.price = $event;
+    })
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.price]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_14, [_hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+    id: "dropFrom",
+    type: "text",
+    "class": "form-control",
+    placeholder: "dropFrom",
+    "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
+      return $data.form.dropFromLvl = $event;
+    })
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.dropFromLvl]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_16, [_hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+    id: "dropFromImg",
+    type: "file",
+    "class": "form-control",
+    placeholder: "dropFromImg",
+    onChange: _cache[7] || (_cache[7] = function () {
+      return $options.changeImgDrop && $options.changeImgDrop.apply($options, arguments);
+    })
+  }, null, 32
+  /* HYDRATE_EVENTS */
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_18, [_hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
     id: "dropChance",
     type: "text",
     "class": "form-control",
     placeholder: "dropChance",
-    "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
+    "onUpdate:modelValue": _cache[8] || (_cache[8] = function ($event) {
       return $data.form.dropChance = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.dropChance]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_18, [_hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.dropChance]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_20, [_hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
     id: "maxLuck",
     type: "text",
     "class": "form-control",
     placeholder: "maxLuck",
-    "onUpdate:modelValue": _cache[8] || (_cache[8] = function ($event) {
+    "onUpdate:modelValue": _cache[9] || (_cache[9] = function ($event) {
       return $data.form.maxLuck = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.maxLuck]])]), _hoisted_20], 32
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.maxLuck]])]), _hoisted_22], 32
   /* HYDRATE_EVENTS */
   )]);
 }
@@ -19423,8 +19551,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
+
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("chance to drop: ");
+
+var _hoisted_2 = {
+  key: 0
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.item.name), 1
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("img", {
+    src: "/upload/mob/".concat($data.item.dropFromImg),
+    alt: ""
+  }, null, 8
+  /* PROPS */
+  , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("img", {
+    src: "/upload/item/".concat($data.item.photo),
+    alt: ""
+  }, null, 8
+  /* PROPS */
+  , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.item.name), 1
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
@@ -19433,9 +19577,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "text"
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.luckAmount]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", null, "chance to drop: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.dropChanceCalcul) + "% ", 1
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.luckAmount]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", null, [_hoisted_1, $data.luckAmount != '' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("span", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.dropChanceCalcul) + "% ", 1
   /* TEXT */
-  )]);
+  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]);
 }
 
 /***/ }),
